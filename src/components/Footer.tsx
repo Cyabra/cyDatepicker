@@ -16,12 +16,12 @@ const Footer = () => {
 			return classNames.footer();
 		}
 
-		return 'flex items-center justify-end pb-2.5 pt-3 border-t border-gray-300 dark:border-gray-700';
+		return 'date-picker-calendar-footer-wrapper flex items-center justify-end pb-2.5 pt-3 border-t border-gray-300 dark:border-gray-700';
 	}, [classNames]);
 
 	return (
 		<div className={getClassName()}>
-			<div className="flex w-full items-center justify-center space-x-3 md:w-auto">
+			<div className="date-picker-calendar-footer-controllers flex w-full items-center justify-center space-x-3 md:w-auto">
 				<SecondaryButton
 					onClick={() => {
 						hideDatepicker();

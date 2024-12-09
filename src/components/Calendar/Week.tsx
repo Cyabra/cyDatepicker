@@ -37,7 +37,7 @@ const Week = () => {
 	}, [startWeekOn]);
 
 	return (
-		<div className="grid grid-cols-7 border-b border-gray-300 py-2 dark:border-gray-700">
+		<div className="date-picker-calendar-days-selector-week-wrapper grid grid-cols-7 border-b border-gray-300 py-2 dark:border-gray-700">
 			{DAYS.map(item => (
 				<div key={item} className="text-center tracking-wide text-gray-500">
 					{ucFirst(

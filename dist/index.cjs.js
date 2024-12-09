@@ -295,6 +295,23 @@ const DatepickerContext = /*#__PURE__*/require$$0.createContext({
   value: null
 });
 
+function useOnClickOutside(ref, handler) {
+  require$$0.useEffect(() => {
+    const listener = event => {
+      if (!ref.current || ref.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+    return () => {
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, [ref, handler]);
+}
+
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function getDefaultExportFromCjs (x) {
@@ -2292,11 +2309,11 @@ const Days = props => {
     const dayIsSameEnd = period.end && dateIsSame(day, period.end, 'date');
     const dayIsSameHoverDay = dayHover && dateIsSame(day, dayHover, 'date');
     if (dayIsSameStart && dayIsSameEnd) {
-      className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium rounded-full`;
+      className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium rounded-full day-selected`;
     } else if (dayIsSameStart) {
-      className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium ${dayIsSameHoverDay && !period.end ? 'rounded-full' : 'rounded-l-full'}`;
+      className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium ${dayIsSameHoverDay && !period.end ? 'rounded-full' : 'rounded-l-full'} day-selected start`;
     } else if (dayIsSameEnd) {
-      className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium ${dayIsSameHoverDay && !period.start ? 'rounded-full' : 'rounded-r-full'}`;
+      className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium ${dayIsSameHoverDay && !period.start ? 'rounded-full' : 'rounded-r-full'} day-selected end`;
     }
     return {
       active: dayIsSameStart || dayIsSameEnd,
@@ -2310,7 +2327,7 @@ const Days = props => {
         start: true,
         end: false
       })) {
-        return ` ${BG_COLOR['100'][primaryColor]} ${currentDateClass(day)} dark:bg-white/10`;
+        return ` ${BG_COLOR['100'][primaryColor]} ${currentDateClass(day)} dark:bg-white/10 day-between`;
       }
     }
     if (!dayHover) {
@@ -2330,7 +2347,7 @@ const Days = props => {
     }
     if (dateIsSame(dayHover, day, 'date')) {
       const bgColor = BG_COLOR['500'][primaryColor];
-      className = ` transition-all duration-500 text-white font-medium ${bgColor} ${period.start ? 'rounded-r-full' : 'rounded-l-full'}`;
+      className = ` transition-all duration-500 text-white font-medium ${bgColor} ${period.start ? 'rounded-r-full' : 'rounded-l-full'} day`;
     }
     return className;
   }, [currentDateClass, dayHover, period.end, period.start, primaryColor]);
@@ -2444,34 +2461,46 @@ const Days = props => {
     }
   }, [dayHover, disabledDates?.length, onClickDay, onClickNextDays, onClickPreviousDays, period.end, period.start]);
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "my-1 grid grid-cols-7 gap-y-0.5",
-    children: [days.previous.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-      type: "button",
-      disabled: isDateDisabled(item),
-      className: `${buttonClass(item, 'previous')}`,
-      onClick: () => handleClickDay(item, 'previous'),
-      onMouseOver: () => {
-        hoverDay(item);
-      },
-      children: item.getDate()
-    }, index)), days.current.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-      type: "button",
-      disabled: isDateDisabled(item),
-      className: `${buttonClass(item, 'current')}`,
-      onClick: () => handleClickDay(item, 'current'),
-      onMouseOver: () => {
-        hoverDay(item);
-      },
-      children: item.getDate()
-    }, index)), days.next.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-      type: "button",
-      disabled: isDateDisabled(item),
-      className: `${buttonClass(item, 'next')}`,
-      onClick: () => handleClickDay(item, 'next'),
-      onMouseOver: () => {
-        hoverDay(item);
-      },
-      children: item.getDate()
+    className: "date-picker-calendar-days-in-month-selector-wrapper my-1 grid grid-cols-7 gap-y-0.5",
+    children: [days.previous.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "day-btn-wrapper",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        "data-date": new Date(item).setHours(0, 0, 0, 0),
+        type: "button",
+        disabled: isDateDisabled(item),
+        className: `${buttonClass(item, 'previous')}`,
+        onClick: () => handleClickDay(item, 'previous'),
+        onMouseOver: () => {
+          hoverDay(item);
+        },
+        children: item.getDate()
+      }, index)
+    }, index)), days.current.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "day-btn-wrapper",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        "data-date": new Date(item).setHours(0, 0, 0, 0),
+        type: "button",
+        disabled: isDateDisabled(item),
+        className: `${buttonClass(item, 'current')}`,
+        onClick: () => handleClickDay(item, 'current'),
+        onMouseOver: () => {
+          hoverDay(item);
+        },
+        children: item.getDate()
+      }, index)
+    }, index)), days.next.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "day-btn-wrapper",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        "data-date": new Date(item).setHours(0, 0, 0, 0),
+        type: "button",
+        disabled: isDateDisabled(item),
+        className: `${buttonClass(item, 'next')}`,
+        onClick: () => handleClickDay(item, 'next'),
+        onMouseOver: () => {
+          hoverDay(item);
+        },
+        children: item.getDate()
+      }, index)
     }, index))]
   });
 };
@@ -2532,7 +2561,7 @@ const Week = () => {
     return 0;
   }, [startWeekOn]);
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "grid grid-cols-7 border-b border-gray-300 py-2 dark:border-gray-700",
+    className: "date-picker-calendar-days-selector-week-wrapper grid grid-cols-7 border-b border-gray-300 py-2 dark:border-gray-700",
     children: DAYS.map(item => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "text-center tracking-wide text-gray-500",
       children: ucFirst(shortString(dateFormat(new Date(`2022-11-${6 + item + startDateModifier}`), 'ddd', i18n) || ''))
@@ -2741,11 +2770,11 @@ const Calendar = props => {
     };
   }, [maxDate, minDate]);
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "w-full md:w-[296px] md:min-w-[296px]",
+    className: "date-picker-calendar-section w-full md:w-[296px] md:min-w-[296px]",
     children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "flex items-center space-x-1.5 rounded-md border border-gray-300 px-2 py-1.5 dark:border-gray-700",
+      className: "date-picker-calendar-pagination flex items-center space-x-1.5 rounded-md border border-gray-300 px-2 py-1.5 dark:border-gray-700",
       children: [!showMonths && !showYears && /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "flex-none",
+        className: "date-picker-calendar-pagination-chevron-left flex-none",
         children: /*#__PURE__*/jsxRuntimeExports.jsx(RoundedButton, {
           roundedFull: true,
           onClick: onClickPrevious,
@@ -2754,7 +2783,7 @@ const Calendar = props => {
           })
         })
       }), showYears && /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "flex-none",
+        className: "date-picker-calendar-pagination-chevron-double-left flex-none",
         children: /*#__PURE__*/jsxRuntimeExports.jsx(RoundedButton, {
           roundedFull: true,
           onClick: () => {
@@ -2765,9 +2794,9 @@ const Calendar = props => {
           })
         })
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "flex flex-1 items-center space-x-1.5",
+        className: "date-picker-calendar-pagination-date-wrapper flex flex-1 items-center space-x-1.5",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "w-1/2",
+          className: "date-picker-calendar-pagination-date-month w-1/2",
           children: /*#__PURE__*/jsxRuntimeExports.jsx(RoundedButton, {
             onClick: () => {
               setShowMonths(!showMonths);
@@ -2776,7 +2805,7 @@ const Calendar = props => {
             children: dateFormat(date, 'MMM', i18n)
           })
         }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "w-1/2",
+          className: "date-picker-calendar-pagination-date-year w-1/2",
           children: /*#__PURE__*/jsxRuntimeExports.jsx(RoundedButton, {
             onClick: () => {
               setShowYears(!showYears);
@@ -2788,7 +2817,7 @@ const Calendar = props => {
           })
         })]
       }), showYears && /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "flex-none",
+        className: "date-picker-calendar-pagination-chevron-double-right flex-none",
         children: /*#__PURE__*/jsxRuntimeExports.jsx(RoundedButton, {
           roundedFull: true,
           onClick: () => {
@@ -2799,7 +2828,7 @@ const Calendar = props => {
           })
         })
       }), !showMonths && !showYears && /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "flex-none",
+        className: "date-picker-calendar-pagination-chevron-right flex-none",
         children: /*#__PURE__*/jsxRuntimeExports.jsx(RoundedButton, {
           roundedFull: true,
           onClick: onClickNext,
@@ -2809,7 +2838,7 @@ const Calendar = props => {
         })
       })]
     }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "mt-0.5 min-h-[285px] px-0.5 sm:px-2",
+      className: "date-picker-calendar-days-selector-wrapper mt-0.5 min-h-[285px] px-0.5 sm:px-2",
       children: [showMonths && /*#__PURE__*/jsxRuntimeExports.jsx(Months, {
         currentMonth: date.getMonth() + 1,
         clickMonth: clickMonth
@@ -2847,7 +2876,7 @@ const PrimaryButton = props => {
   const ringColor = RING_COLOR.focus[primaryColor];
   // Functions
   const getClassName = require$$0.useCallback(() => {
-    return `w-full transition-all duration-300 ${bgColor} ${borderColor} text-white font-medium border px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 ${bgColorHover} ${ringColor} ${disabled ? ' cursor-no-drop' : ''}`;
+    return `w-full transition-all duration-300 ${bgColor} ${borderColor} text-white  apply-btn font-medium border px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 ${bgColorHover} ${ringColor} ${disabled ? ' cursor-no-drop' : ''}`;
   }, [bgColor, bgColorHover, borderColor, disabled, ringColor]);
   return /*#__PURE__*/jsxRuntimeExports.jsx("button", {
     type: "button",
@@ -2871,7 +2900,7 @@ const SecondaryButton = props => {
   // Functions
   const getClassName = require$$0.useCallback(() => {
     const ringColor = RING_COLOR.focus[primaryColor];
-    return `w-full transition-all duration-300 bg-white dark:text-gray-700 font-medium border border-gray-300 px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor}`;
+    return `w-full transition-all duration-300 bg-white dark:text-gray-700 font-medium border border-gray-300 px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor} cancel-btn`;
   }, [primaryColor]);
   return /*#__PURE__*/jsxRuntimeExports.jsx("button", {
     type: "button",
@@ -2896,12 +2925,12 @@ const Footer = () => {
     if (typeof classNames !== 'undefined' && typeof classNames?.footer === 'function') {
       return classNames.footer();
     }
-    return 'flex items-center justify-end pb-2.5 pt-3 border-t border-gray-300 dark:border-gray-700';
+    return 'date-picker-calendar-footer-wrapper flex items-center justify-end pb-2.5 pt-3 border-t border-gray-300 dark:border-gray-700';
   }, [classNames]);
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
     className: getClassName(),
     children: /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "flex w-full items-center justify-center space-x-3 md:w-auto",
+      className: "date-picker-calendar-footer-controllers flex w-full items-center justify-center space-x-3 md:w-auto",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(SecondaryButton, {
         onClick: () => {
           hideDatepicker();
@@ -2927,6 +2956,15 @@ const Footer = () => {
     })
   });
 };
+
+const Arrow = /*#__PURE__*/require$$0.forwardRef((props, ref) => {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    ...props,
+    ref: ref,
+    className: "date-picker-arrow-marker absolute z-20 ml-[1.2rem] mt-0.5 h-4 w-4 rotate-45 border-l border-t border-gray-300 bg-white dark:border-slate-600 dark:bg-slate-800"
+  });
+});
+Arrow.displayName = 'Arrow';
 
 const CloseIcon = props => {
   const {
@@ -3013,7 +3051,7 @@ const Input = e => {
     }
     const border = BORDER_COLOR.focus[primaryColor];
     const ring = RING_COLOR['second-focus'][primaryColor];
-    const defaultInputClassName = `relative transition-all duration-300 py-2.5 pl-4 pr-14 w-full border-gray-300 dark:bg-slate-800 dark:text-white/80 dark:border-slate-600 rounded-lg tracking-wide font-light text-sm placeholder-gray-400 bg-white focus:ring disabled:opacity-40 disabled:cursor-not-allowed ${border} ${ring}`;
+    const defaultInputClassName = `date-picker-input relative transition-all duration-300 py-2.5 pl-4 pr-14 w-full border-gray-300 dark:bg-slate-800 dark:text-white/80 dark:border-slate-600 rounded-lg tracking-wide font-light text-sm placeholder-gray-400 bg-white focus:ring disabled:opacity-40 disabled:cursor-not-allowed ${border} ${ring}`;
     return typeof inputClassName === 'function' ? inputClassName(defaultInputClassName) : typeof inputClassName === 'string' && inputClassName !== '' ? inputClassName : defaultInputClassName;
   }, [inputRef, classNames, primaryColor, inputClassName]);
   const handleInputChange = require$$0.useCallback(e => {
@@ -3075,7 +3113,7 @@ const Input = e => {
     if (button && typeof classNames !== 'undefined' && typeof classNames?.toggleButton === 'function') {
       return classNames.toggleButton(button);
     }
-    const defaultToggleClassName = 'absolute right-0 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed';
+    const defaultToggleClassName = 'date-pciker-select-btn absolute right-0 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed';
     return typeof toggleClassName === 'function' ? toggleClassName(defaultToggleClassName) : typeof toggleClassName === 'string' && toggleClassName !== '' ? toggleClassName : defaultToggleClassName;
   }, [toggleClassName, buttonRef, classNames]);
   // UseEffects && UseLayoutEffect
@@ -3315,7 +3353,7 @@ const Shortcuts = () => {
     return item?.text ?? null;
   }, []);
   return shortcutOptions?.length ? /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "mb-3 border-gray-300 pr-1 md:border-b lg:mb-0 lg:border-b-0 lg:border-r dark:border-gray-700",
+    className: "date-picker-calendar-shortcuts-wrapper mb-3 border-gray-300 pr-1 md:border-b lg:mb-0 lg:border-b-0 lg:border-r dark:border-gray-700",
     children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
       className: "flex w-full flex-wrap pb-1 tracking-wide lg:flex-col lg:pb-0",
       children: shortcutOptions.map(([key, item], index) => Array.isArray(item) ? item.map((item, index) => /*#__PURE__*/jsxRuntimeExports.jsx(ItemTemplate, {
@@ -3333,32 +3371,6 @@ const Shortcuts = () => {
   }) : null;
 };
 
-function useOnClickOutside(ref, handler) {
-  require$$0.useEffect(() => {
-    const listener = event => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
-      handler(event);
-    };
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-    return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [ref, handler]);
-}
-
-const Arrow = /*#__PURE__*/require$$0.forwardRef((props, ref) => {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    ...props,
-    ref: ref,
-    className: "absolute z-20 ml-[1.2rem] mt-0.5 h-4 w-4 rotate-45 border-l border-t border-gray-300 bg-white dark:border-slate-600 dark:bg-slate-800"
-  });
-});
-Arrow.displayName = 'Arrow';
-
 const VerticalDash = () => {
   // Contexts
   const {
@@ -3366,7 +3378,7 @@ const VerticalDash = () => {
   } = require$$0.useContext(DatepickerContext);
   const bgColor = BG_COLOR['500'][primaryColor];
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: `hidden h-7 w-1 rounded-full md:block ${bgColor || 'bg-blue-500'}`
+    className: `date-picker-calendar-sections-seperator hidden h-7 w-1 rounded-full md:block ${bgColor || 'bg-blue-500'}`
   });
 };
 
@@ -3607,11 +3619,11 @@ const Datepicker = props => {
     };
   }, [asSingle, safePrimaryColor, configs, hideDatepicker, period, dayHover, inputText, onChange, showFooter, placeholder, separator, i18n, value, disabled, inputClassName, containerClassName, toggleClassName, toggleIcon, readOnly, displayFormat, minDate, maxDate, dateLooking, disabledDates, inputId, inputName, startWeekOn, classNames, inputRef, popoverDirection, required, firstGotoDate]);
   const containerClassNameOverload = require$$0.useMemo(() => {
-    const defaultContainerClassName = 'relative w-full text-gray-700';
+    const defaultContainerClassName = 'date-picker-wrapper relative w-full text-gray-700';
     return typeof containerClassName === 'function' ? containerClassName(defaultContainerClassName) : typeof containerClassName === 'string' && containerClassName !== '' ? containerClassName : defaultContainerClassName;
   }, [containerClassName]);
   const popupClassNameOverload = require$$0.useMemo(() => {
-    const defaultPopupClassName = 'transition-all ease-out duration-300 absolute z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm translate-y-4 opacity-0 hidden';
+    const defaultPopupClassName = 'date-picker-calendar-wrapper transition-all ease-out duration-300 absolute z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm translate-y-4 opacity-0 hidden';
     return typeof popupClassName === 'function' ? popupClassName(defaultPopupClassName) : typeof popupClassName === 'string' && popupClassName !== '' ? popupClassName : defaultPopupClassName;
   }, [popupClassName]);
   return /*#__PURE__*/jsxRuntimeExports.jsx(DatepickerContext.Provider, {
@@ -3627,11 +3639,11 @@ const Datepicker = props => {
         children: [/*#__PURE__*/jsxRuntimeExports.jsx(Arrow, {
           ref: arrowRef
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-          className: "mt-2.5 rounded-lg border border-gray-300 bg-white px-1 py-0.5 shadow-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white",
+          className: "date-picker-calendar-outer mt-2.5 rounded-lg border border-gray-300 bg-white px-1 py-0.5 shadow-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white",
           children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-            className: "flex flex-col py-2 lg:flex-row",
+            className: "date-picker-calendar-inner flex flex-col py-2 lg:flex-row",
             children: [showShortcuts && /*#__PURE__*/jsxRuntimeExports.jsx(Shortcuts, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-              className: `flex flex-col items-stretch space-y-4 md:flex-row md:space-x-1.5 md:space-y-0 ${showShortcuts ? 'md:pl-2' : 'md:pl-1'} pr-2 lg:pr-1`,
+              className: `date-picker-calendar-sections-wrapper flex flex-col items-stretch space-y-4 md:flex-row md:space-x-1.5 md:space-y-0 ${showShortcuts ? 'md:pl-2' : 'md:pl-1'} pr-2 lg:pr-1`,
               children: [/*#__PURE__*/jsxRuntimeExports.jsx(Calendar, {
                 date: firstDate,
                 onClickPrevious: previousMonthFirst,
@@ -3642,7 +3654,7 @@ const Datepicker = props => {
                 maxDate: maxDate
               }), useRange && /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
                 children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-                  className: "flex items-center",
+                  className: "date-picker-calendar-sections-seperator-wrapper flex items-center",
                   children: /*#__PURE__*/jsxRuntimeExports.jsx(VerticalDash, {})
                 }), /*#__PURE__*/jsxRuntimeExports.jsx(Calendar, {
                   date: secondDate,

@@ -60,15 +60,15 @@ const Days = (props: Props) => {
 			const dayIsSameHoverDay = dayHover && dateIsSame(day, dayHover, 'date');
 
 			if (dayIsSameStart && dayIsSameEnd) {
-				className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium rounded-full`;
+				className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium rounded-full day-selected`;
 			} else if (dayIsSameStart) {
 				className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium ${
 					dayIsSameHoverDay && !period.end ? 'rounded-full' : 'rounded-l-full'
-				}`;
+				} day-selected start`;
 			} else if (dayIsSameEnd) {
 				className = ` ${BG_COLOR['500'][primaryColor]} text-white font-medium ${
 					dayIsSameHoverDay && !period.start ? 'rounded-full' : 'rounded-r-full'
-				}`;
+				} day-selected end`;
 			}
 
 			return {
@@ -89,7 +89,7 @@ const Days = (props: Props) => {
 				) {
 					return ` ${BG_COLOR['100'][primaryColor]} ${currentDateClass(
 						day
-					)} dark:bg-white/10`;
+					)} dark:bg-white/10 day-between`;
 				}
 			}
 
@@ -119,7 +119,7 @@ const Days = (props: Props) => {
 				const bgColor = BG_COLOR['500'][primaryColor];
 				className = ` transition-all duration-500 text-white font-medium ${bgColor} ${
 					period.start ? 'rounded-r-full' : 'rounded-l-full'
-				}`;
+				} day`;
 			}
 
 			return className;
@@ -295,50 +295,59 @@ const Days = (props: Props) => {
 	);
 
 	return (
-		<div className="my-1 grid grid-cols-7 gap-y-0.5">
+		<div className="date-picker-calendar-days-in-month-selector-wrapper my-1 grid grid-cols-7 gap-y-0.5">
 			{days.previous.map((item, index) => (
-				<button
-					type="button"
-					key={index}
-					disabled={isDateDisabled(item)}
-					className={`${buttonClass(item, 'previous')}`}
-					onClick={() => handleClickDay(item, 'previous')}
-					onMouseOver={() => {
-						hoverDay(item);
-					}}
-				>
-					{item.getDate()}
-				</button>
+				<div className="day-btn-wrapper" key={index}>
+					<button
+						data-date={new Date(item).setHours(0, 0, 0, 0)}
+						type="button"
+						key={index}
+						disabled={isDateDisabled(item)}
+						className={`${buttonClass(item, 'previous')}`}
+						onClick={() => handleClickDay(item, 'previous')}
+						onMouseOver={() => {
+							hoverDay(item);
+						}}
+					>
+						{item.getDate()}
+					</button>
+				</div>
 			))}
 
 			{days.current.map((item, index) => (
-				<button
-					type="button"
-					key={index}
-					disabled={isDateDisabled(item)}
-					className={`${buttonClass(item, 'current')}`}
-					onClick={() => handleClickDay(item, 'current')}
-					onMouseOver={() => {
-						hoverDay(item);
-					}}
-				>
-					{item.getDate()}
-				</button>
+				<div className="day-btn-wrapper" key={index}>
+					<button
+						data-date={new Date(item).setHours(0, 0, 0, 0)}
+						type="button"
+						key={index}
+						disabled={isDateDisabled(item)}
+						className={`${buttonClass(item, 'current')}`}
+						onClick={() => handleClickDay(item, 'current')}
+						onMouseOver={() => {
+							hoverDay(item);
+						}}
+					>
+						{item.getDate()}
+					</button>
+				</div>
 			))}
 
 			{days.next.map((item, index) => (
-				<button
-					type="button"
-					key={index}
-					disabled={isDateDisabled(item)}
-					className={`${buttonClass(item, 'next')}`}
-					onClick={() => handleClickDay(item, 'next')}
-					onMouseOver={() => {
-						hoverDay(item);
-					}}
-				>
-					{item.getDate()}
-				</button>
+				<div className="day-btn-wrapper" key={index}>
+					<button
+						data-date={new Date(item).setHours(0, 0, 0, 0)}
+						type="button"
+						key={index}
+						disabled={isDateDisabled(item)}
+						className={`${buttonClass(item, 'next')}`}
+						onClick={() => handleClickDay(item, 'next')}
+						onMouseOver={() => {
+							hoverDay(item);
+						}}
+					>
+						{item.getDate()}
+					</button>
+				</div>
 			))}
 		</div>
 	);

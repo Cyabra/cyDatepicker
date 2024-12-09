@@ -13,7 +13,7 @@ const SecondaryButton = (props: ButtonProps) => {
 	// Functions
 	const getClassName: () => string = useCallback(() => {
 		const ringColor = RING_COLOR.focus[primaryColor as keyof typeof RING_COLOR.focus];
-		return `w-full transition-all duration-300 bg-white dark:text-gray-700 font-medium border border-gray-300 px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor}`;
+		return `w-full transition-all duration-300 bg-white dark:text-gray-700 font-medium border border-gray-300 px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor} cancel-btn`;
 	}, [primaryColor]);
 
 	return (

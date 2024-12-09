@@ -8,7 +8,11 @@ const VerticalDash = () => {
 	const { primaryColor } = useContext(DatepickerContext);
 	const bgColor = BG_COLOR['500'][primaryColor as keyof (typeof BG_COLOR)['500']];
 
-	return <div className={`hidden h-7 w-1 rounded-full md:block ${bgColor || 'bg-blue-500'}`} />;
+	return (
+		<div
+			className={`date-picker-calendar-sections-seperator hidden h-7 w-1 rounded-full md:block ${bgColor || 'bg-blue-500'}`}
+		/>
+	);
 };
 
 export default VerticalDash;

@@ -16,7 +16,7 @@ const PrimaryButton = (props: ButtonProps) => {
 
 	// Functions
 	const getClassName = useCallback(() => {
-		return `w-full transition-all duration-300 ${bgColor} ${borderColor} text-white font-medium border px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 ${bgColorHover} ${ringColor} ${
+		return `w-full transition-all duration-300 ${bgColor} ${borderColor} text-white  apply-btn font-medium border px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 ${bgColorHover} ${ringColor} ${
 			disabled ? ' cursor-no-drop' : ''
 		}`;
 	}, [bgColor, bgColorHover, borderColor, disabled, ringColor]);

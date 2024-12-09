@@ -1,9 +1,5 @@
 import { createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import Calendar from '../components/Calendar';
-import Footer from '../components/Footer';
-import Input from '../components/Input';
-import Shortcuts from '../components/Shortcuts';
 import {
 	COLORS,
 	DATE_FORMAT,
@@ -29,14 +25,17 @@ import {
 } from '../libs/date';
 import { Period, DatepickerType, ColorKeys, DateType } from '../types';
 
+import Calendar from './Calendar';
+import Footer from './Footer';
 import Arrow from './icons/Arrow';
+import Input from './Input';
+import Shortcuts from './Shortcuts';
 import VerticalDash from './VerticalDash';
 
 const Datepicker = (props: DatepickerType) => {
 	// Props
 	const {
 		asSingle = false,
-
 		classNames = undefined,
 		configs = undefined,
 		containerClassName = null,
@@ -371,7 +370,7 @@ const Datepicker = (props: DatepickerType) => {
 	]);
 
 	const containerClassNameOverload = useMemo(() => {
-		const defaultContainerClassName = 'relative w-full text-gray-700';
+		const defaultContainerClassName = 'date-picker-wrapper relative w-full text-gray-700';
 		return typeof containerClassName === 'function'
 			? containerClassName(defaultContainerClassName)
 			: typeof containerClassName === 'string' && containerClassName !== ''
@@ -381,7 +380,7 @@ const Datepicker = (props: DatepickerType) => {
 
 	const popupClassNameOverload = useMemo(() => {
 		const defaultPopupClassName =
-			'transition-all ease-out duration-300 absolute z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm translate-y-4 opacity-0 hidden';
+			'date-picker-calendar-wrapper transition-all ease-out duration-300 absolute z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm translate-y-4 opacity-0 hidden';
 		return typeof popupClassName === 'function'
 			? popupClassName(defaultPopupClassName)
 			: typeof popupClassName === 'string' && popupClassName !== ''
@@ -397,12 +396,12 @@ const Datepicker = (props: DatepickerType) => {
 				<div className={popupClassNameOverload} ref={calendarContainerRef}>
 					<Arrow ref={arrowRef} />
 
-					<div className="mt-2.5 rounded-lg border border-gray-300 bg-white px-1 py-0.5 shadow-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white">
-						<div className="flex flex-col py-2 lg:flex-row">
+					<div className="date-picker-calendar-outer mt-2.5 rounded-lg border border-gray-300 bg-white px-1 py-0.5 shadow-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white">
+						<div className="date-picker-calendar-inner flex flex-col py-2 lg:flex-row">
 							{showShortcuts && <Shortcuts />}
 
 							<div
-								className={`flex flex-col items-stretch space-y-4 md:flex-row md:space-x-1.5 md:space-y-0 ${
+								className={`date-picker-calendar-sections-wrapper flex flex-col items-stretch space-y-4 md:flex-row md:space-x-1.5 md:space-y-0 ${
 									showShortcuts ? 'md:pl-2' : 'md:pl-1'
 								} pr-2 lg:pr-1`}
 							>
@@ -418,7 +417,7 @@ const Datepicker = (props: DatepickerType) => {
 
 								{useRange && (
 									<>
-										<div className="flex items-center">
+										<div className="date-picker-calendar-sections-seperator-wrapper flex items-center">
 											<VerticalDash />
 										</div>
 

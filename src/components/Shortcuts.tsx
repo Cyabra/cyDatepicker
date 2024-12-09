@@ -131,7 +131,7 @@ const Shortcuts = () => {
 	}, []);
 
 	return shortcutOptions?.length ? (
-		<div className="mb-3 border-gray-300 pr-1 md:border-b lg:mb-0 lg:border-b-0 lg:border-r dark:border-gray-700">
+		<div className="date-picker-calendar-shortcuts-wrapper mb-3 border-gray-300 pr-1 md:border-b lg:mb-0 lg:border-b-0 lg:border-r dark:border-gray-700">
 			<ul className="flex w-full flex-wrap pb-1 tracking-wide lg:flex-col lg:pb-0">
 				{shortcutOptions.map(([key, item], index) =>
 					Array.isArray(item) ? (
