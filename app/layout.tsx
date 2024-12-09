@@ -1,18 +1,18 @@
-import { ReactNode } from "react";
-import "../styles/globals.css";
+import { ReactNode } from 'react';
+import '../styles/globals.css';
 
 interface Props {
-    children: ReactNode;
+	children: ReactNode;
 }
 
 const RootLayout = (props: Props) => {
-    const { children } = props;
+	const { children } = props;
 
-    return (
-        <html lang="en">
-            <body>{children}</body>
-        </html>
-    );
+	return (
+		<html lang="en">
+			<body>{children}</body>
+		</html>
+	);
 };
 
 export default RootLayout;

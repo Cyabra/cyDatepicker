@@ -1,4 +1,4 @@
-import Datepicker from "./components/Datepicker";
+import Datepicker from './components/Datepicker';
 
 /*export type {
     ClassNamesTypeProp,
@@ -14,5 +14,5 @@ import Datepicker from "./components/Datepicker";
 } from "./types";*/
 
 // eslint-disable-next-line react-refresh/only-export-components
-export * from "./types";
+export * from './types';
 export default Datepicker;

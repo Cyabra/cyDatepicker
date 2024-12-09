@@ -1,127 +1,127 @@
-import { createContext, ReactNode, RefObject } from "react";
+import { createContext, ReactNode, RefObject } from 'react';
 
 import {
-    DATE_FORMAT,
-    DEFAULT_COLOR,
-    DEFAULT_DATE_LOOKING,
-    DEFAULT_SEPARATOR,
-    LANGUAGE,
-    START_WEEK
-} from "../constants";
+	DATE_FORMAT,
+	DEFAULT_COLOR,
+	DEFAULT_DATE_LOOKING,
+	DEFAULT_SEPARATOR,
+	LANGUAGE,
+	START_WEEK
+} from '../constants';
 import {
-    Configs,
-    Period,
-    DateValueType,
-    DateType,
-    DateRangeType,
-    ClassNamesTypeProp,
-    PopoverDirectionType,
-    ColorKeys,
-    WeekStringType,
-    DateLookingType
-} from "../types";
+	Configs,
+	Period,
+	DateValueType,
+	DateType,
+	DateRangeType,
+	ClassNamesTypeProp,
+	PopoverDirectionType,
+	ColorKeys,
+	WeekStringType,
+	DateLookingType
+} from '../types';
 
 interface DatepickerStore {
-    arrowContainer: RefObject<HTMLDivElement> | null;
-    asSingle?: boolean;
+	arrowContainer: RefObject<HTMLDivElement> | null;
+	asSingle?: boolean;
 
-    calendarContainer: RefObject<HTMLDivElement> | null;
-    changeDatepickerValue: (value: DateValueType, e?: HTMLInputElement | null | undefined) => void;
-    changeDayHover: (day: DateType) => void;
-    changeInputText: (text: string) => void;
-    changePeriod: (period: Period) => void;
-    classNames?: ClassNamesTypeProp;
-    configs?: Configs;
-    containerClassName?: ((className: string) => string) | string | null;
+	calendarContainer: RefObject<HTMLDivElement> | null;
+	changeDatepickerValue: (value: DateValueType, e?: HTMLInputElement | null | undefined) => void;
+	changeDayHover: (day: DateType) => void;
+	changeInputText: (text: string) => void;
+	changePeriod: (period: Period) => void;
+	classNames?: ClassNamesTypeProp;
+	configs?: Configs;
+	containerClassName?: ((className: string) => string) | string | null;
 
-    dateLooking?: DateLookingType;
-    dayHover: DateType;
-    disabled?: boolean;
-    disabledDates?: DateRangeType[] | null;
-    displayFormat: string;
+	dateLooking?: DateLookingType;
+	dayHover: DateType;
+	disabled?: boolean;
+	disabledDates?: DateRangeType[] | null;
+	displayFormat: string;
 
-    hideDatepicker: () => void;
+	hideDatepicker: () => void;
 
-    i18n: string;
-    input?: RefObject<HTMLInputElement>;
-    inputClassName?: ((className: string) => string) | string | null;
-    inputId?: string;
-    inputName?: string;
-    inputText: string;
+	i18n: string;
+	input?: RefObject<HTMLInputElement>;
+	inputClassName?: ((className: string) => string) | string | null;
+	inputId?: string;
+	inputName?: string;
+	inputText: string;
 
-    maxDate?: DateType | null;
-    minDate?: DateType | null;
+	maxDate?: DateType | null;
+	minDate?: DateType | null;
 
-    period: Period;
-    placeholder?: string | null;
-    popoverDirection?: PopoverDirectionType;
-    primaryColor: ColorKeys;
+	period: Period;
+	placeholder?: string | null;
+	popoverDirection?: PopoverDirectionType;
+	primaryColor: ColorKeys;
 
-    readOnly?: boolean;
-    required?: boolean;
-    separator: string;
+	readOnly?: boolean;
+	required?: boolean;
+	separator: string;
 
-    showFooter?: boolean;
-    startWeekOn?: WeekStringType | null;
+	showFooter?: boolean;
+	startWeekOn?: WeekStringType | null;
 
-    toggleClassName?: ((className: string) => string) | string | null;
-    toggleIcon?: (open: boolean) => ReactNode;
+	toggleClassName?: ((className: string) => string) | string | null;
+	toggleIcon?: (open: boolean) => ReactNode;
 
-    updateFirstDate: (date: Date) => void;
+	updateFirstDate: (date: Date) => void;
 
-    value: DateValueType;
+	value: DateValueType;
 }
 
 const DatepickerContext = createContext<DatepickerStore>({
-    arrowContainer: null,
-    asSingle: false,
+	arrowContainer: null,
+	asSingle: false,
 
-    calendarContainer: null,
-    changeDatepickerValue: () => {},
-    changeDayHover: () => {},
-    changeInputText: () => {},
-    changePeriod: () => {},
-    classNames: undefined,
-    configs: undefined,
-    containerClassName: "",
+	calendarContainer: null,
+	changeDatepickerValue: () => {},
+	changeDayHover: () => {},
+	changeInputText: () => {},
+	changePeriod: () => {},
+	classNames: undefined,
+	configs: undefined,
+	containerClassName: '',
 
-    dateLooking: DEFAULT_DATE_LOOKING,
-    dayHover: null,
-    disabled: false,
-    disabledDates: null,
-    displayFormat: DATE_FORMAT,
+	dateLooking: DEFAULT_DATE_LOOKING,
+	dayHover: null,
+	disabled: false,
+	disabledDates: null,
+	displayFormat: DATE_FORMAT,
 
-    hideDatepicker: () => {},
+	hideDatepicker: () => {},
 
-    i18n: LANGUAGE,
+	i18n: LANGUAGE,
 
-    input: undefined,
-    inputClassName: "",
+	input: undefined,
+	inputClassName: '',
 
-    inputId: undefined,
-    inputName: undefined,
-    inputText: "",
+	inputId: undefined,
+	inputName: undefined,
+	inputText: '',
 
-    maxDate: null,
-    minDate: null,
+	maxDate: null,
+	minDate: null,
 
-    period: { start: null, end: null },
-    popoverDirection: undefined,
-    primaryColor: DEFAULT_COLOR,
+	period: { start: null, end: null },
+	popoverDirection: undefined,
+	primaryColor: DEFAULT_COLOR,
 
-    readOnly: false,
-    required: false,
+	readOnly: false,
+	required: false,
 
-    separator: DEFAULT_SEPARATOR,
-    showFooter: false,
-    startWeekOn: START_WEEK,
+	separator: DEFAULT_SEPARATOR,
+	showFooter: false,
+	startWeekOn: START_WEEK,
 
-    toggleClassName: "",
-    toggleIcon: undefined,
+	toggleClassName: '',
+	toggleIcon: undefined,
 
-    updateFirstDate: () => {},
+	updateFirstDate: () => {},
 
-    value: null
+	value: null
 });
 
 export default DatepickerContext;
